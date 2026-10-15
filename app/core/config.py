@@ -65,6 +65,39 @@ class Settings(BaseSettings):
     R2_PUBLIC_URL: str = "https://pub-133e384175444480bdd308fbbb08d13b.r2.dev"
 
     # =========================================================
+    # CORS
+    # =========================================================
+
+    CORS_ORIGINS: str = (
+        "http://localhost:3000,http://localhost:3001,http://localhost:5173,http://localhost:5174,"
+        "http://127.0.0.1:3000,http://127.0.0.1:3001,http://127.0.0.1:5173,http://127.0.0.1:5174"
+    )
+    CORS_ALLOW_ORIGIN_REGEX: str = r"http://(localhost|127\.0\.0\.1)(:\d+)?"
+    CORS_ALLOW_CREDENTIALS: bool = True
+    CORS_ALLOW_METHODS: str = "*"
+    CORS_ALLOW_HEADERS: str = "*"
+
+    @property
+    def cors_origins_list(self) -> list[str]:
+        if not self.CORS_ORIGINS:
+            return []
+        if self.CORS_ORIGINS.strip() == "*":
+            return ["*"]
+        return [origin.strip() for origin in self.CORS_ORIGINS.split(",") if origin.strip()]
+
+    @property
+    def cors_methods_list(self) -> list[str]:
+        if not self.CORS_ALLOW_METHODS or self.CORS_ALLOW_METHODS.strip() == "*":
+            return ["*"]
+        return [method.strip() for method in self.CORS_ALLOW_METHODS.split(",") if method.strip()]
+
+    @property
+    def cors_headers_list(self) -> list[str]:
+        if not self.CORS_ALLOW_HEADERS or self.CORS_ALLOW_HEADERS.strip() == "*":
+            return ["*"]
+        return [header.strip() for header in self.CORS_ALLOW_HEADERS.split(",") if header.strip()]
+
+    # =========================================================
     # SETTINGS
     # =========================================================
 

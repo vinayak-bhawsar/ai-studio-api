@@ -18,6 +18,7 @@ from app.api.project import router as project_router
 from app.api.screenplay import router as screenplay_router
 from app.api.storyboard import router as storyboard_router
 from app.api.style_book import router as style_book_router
+from app.core.config import settings
 from app.utils.exceptions import (
     general_exception_handler,
     http_exception_handler,
@@ -53,25 +54,14 @@ app.mount(
     name="generated-audio",
 )
 
-# Enable CORS for local development origins
-origins = [
-    "http://localhost:3000",
-    "http://localhost:3001",
-    "http://localhost:5173",
-    "http://localhost:5174",
-    "http://127.0.0.1:3000",
-    "http://127.0.0.1:3001",
-    "http://127.0.0.1:5173",
-    "http://127.0.0.1:5174",
-]
-
+# CORS configuration loaded from environment
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
-    allow_origin_regex=r"http://(localhost|127\.0\.0\.1)(:\d+)?",
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_origins=settings.cors_origins_list,
+    allow_origin_regex=settings.CORS_ALLOW_ORIGIN_REGEX or None,
+    allow_credentials=settings.CORS_ALLOW_CREDENTIALS,
+    allow_methods=settings.cors_methods_list,
+    allow_headers=settings.cors_headers_list,
 )
 
 # Exception handlers
