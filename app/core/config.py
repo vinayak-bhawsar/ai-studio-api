@@ -70,9 +70,13 @@ class Settings(BaseSettings):
 
     CORS_ORIGINS: str = (
         "http://localhost:3000,http://localhost:3001,http://localhost:5173,http://localhost:5174,"
-        "http://127.0.0.1:3000,http://127.0.0.1:3001,http://127.0.0.1:5173,http://127.0.0.1:5174"
+        "http://127.0.0.1:3000,http://127.0.0.1:3001,http://127.0.0.1:5173,http://127.0.0.1:5174,"
+        "https://ai-studio-frontend.dpkkmishra.workers.dev,https://ai-studio.500kb.com,"
+        "https://ai.studio.500kb.com,https://ai-studio-frontend.vairagigoldi-9c3.workers.dev"
     )
-    CORS_ALLOW_ORIGIN_REGEX: str = r"http://(localhost|127\.0\.0\.1)(:\d+)?"
+    CORS_ALLOW_ORIGIN_REGEX: str = (
+        r"https?://(localhost|127\.0\.0\.1|.*\.workers\.dev|.*\.500kb\.com)(:\d+)?"
+    )
     CORS_ALLOW_CREDENTIALS: bool = True
     CORS_ALLOW_METHODS: str = "*"
     CORS_ALLOW_HEADERS: str = "*"
@@ -83,7 +87,12 @@ class Settings(BaseSettings):
             return []
         if self.CORS_ORIGINS.strip() == "*":
             return ["*"]
-        return [origin.strip() for origin in self.CORS_ORIGINS.split(",") if origin.strip()]
+        origins = []
+        for part in self.CORS_ORIGINS.replace("\n", ",").replace("\r", ",").split(","):
+            cleaned = part.strip().strip("'\"")
+            if cleaned:
+                origins.append(cleaned)
+        return origins
 
     @property
     def cors_methods_list(self) -> list[str]:
