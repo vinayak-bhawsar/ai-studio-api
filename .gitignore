@@ -1,0 +1,51 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Virtual environment
+venv/
+env/
+.venv/
+
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# Generated media directories (Stored in Cloudflare R2 bucket)
+generated-images/*
+!generated-images/.gitkeep
+
+generated-videos/*
+!generated-videos/.gitkeep
+
+generated-audio/*
+!generated-audio/.gitkeep
+
+# Media files
+*.mp4
+*.mp3
+*.wav
+*.jpg
+*.jpeg
+*.png
+*.gif
+*.dat
+
+# Databases & local logs
+*.db
+*.sqlite3
+*.log
+
+# IDE & OS files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Tests & test scripts (excluded from production)
+tests/
+test_*.py
+scratch/
